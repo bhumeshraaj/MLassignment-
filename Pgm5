@@ -1,0 +1,54 @@
+# IMPLEMENTATION OF FIND-S ALGORITHM FOR HYPOTHESIS LEARNING
+
+# AIM:
+# To implement the Find-S algorithm on a given dataset to determine
+# the most specific hypothesis that is consistent with all positive
+# training examples.
+
+# Import library
+import pandas as pd
+
+# Function to implement the Find-S Algorithm
+def find_s_algorithm(file_path):
+
+    # Read the dataset
+    data = pd.read_csv(file_path)
+
+    print("Training Data:")
+    print(data)
+
+    # Separate attributes and class label
+    attributes = data.columns[:-1]   # All columns except last
+    class_label = data.columns[-1]   # Last column is target
+
+    # Initialize hypothesis with first positive example
+    hypothesis = None
+
+    # Iterate through dataset
+    for index, row in data.iterrows():
+
+        # Consider only positive examples
+        if row[class_label] == 'Yes':
+
+            # Initialize hypothesis with first positive example
+            if hypothesis is None:
+                hypothesis = list(row[attributes])
+
+            else:
+                # Compare attributes with current hypothesis
+                for i in range(len(hypothesis)):
+
+                    # If values differ, generalize with '?'
+                    if hypothesis[i] != row[attributes[i]]:
+                        hypothesis[i] = '?'
+
+    # Print final hypothesis
+    print("\nMost Specific Hypothesis:")
+    print(hypothesis)
+
+
+# Example dataset file path
+file_path = "finds_dataset.csv"
+
+# Call the function
+find_s_algorithm(file_path)
