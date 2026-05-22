@@ -1,0 +1,70 @@
+# DIMENSIONALITY REDUCTION OF IRIS DATASET USING PCA
+
+# AIM:
+# To apply Principal Component Analysis (PCA) on the Iris dataset
+# to reduce its dimensionality from four features to two while
+# retaining the maximum possible variance in the data.
+
+# Import libraries
+import numpy as np
+import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+
+# Load the Iris dataset
+iris = load_iris()
+
+# Features and labels
+data = iris.data
+labels = iris.target
+label_names = iris.target_names
+
+# Convert dataset to DataFrame
+iris_df = pd.DataFrame(data, columns=iris.feature_names)
+
+# Display first few rows
+print("Original Iris Dataset:")
+print(iris_df.head())
+
+# Perform PCA (reduce to 2 dimensions)
+pca = PCA(n_components=2)
+
+# Transform the data
+data_reduced = pca.fit_transform(data)
+
+# Create DataFrame for reduced data
+reduced_df = pd.DataFrame(
+    data_reduced,
+    columns=['Principal Component 1', 'Principal Component 2']
+)
+
+# Add labels
+reduced_df['Label'] = labels
+
+# Print explained variance ratio
+print("\nExplained Variance Ratio:")
+print(pca.explained_variance_ratio_)
+
+# Plot the reduced data
+plt.figure(figsize=(8, 6))
+
+colors = ['red', 'green', 'blue']
+
+for i, label_name in enumerate(label_names):
+    plt.scatter(
+        reduced_df.loc[reduced_df['Label'] == i, 'Principal Component 1'],
+        reduced_df.loc[reduced_df['Label'] == i, 'Principal Component 2'],
+        color=colors[i],
+        label=label_name
+    )
+
+# Labels and title
+plt.xlabel('Principal Component 1')
+plt.ylabel('Principal Component 2')
+plt.title('PCA of Iris Dataset')
+plt.legend()
+
+# Show plot
+plt.grid(True)
+plt.show()
